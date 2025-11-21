@@ -1,0 +1,1458 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>One's Reader Book Collection - Книжный магазин</title>
+    <style>
+        /* Все предыдущие стили остаются без изменений */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.6;
+            color: #1a1a2e;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .header {
+            background: #162447;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.2);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .main-nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .main-nav a {
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        .main-nav a:hover,
+        .main-nav a.active {
+            color: #3498db;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .cart {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .cart-icon {
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+        }
+
+        .page {
+            display: none;
+            margin-top: 80px;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #1f4068 0%, #2c5f9b 100%);
+            color: white;
+            padding: 120px 0 80px;
+            text-align: center;
+        }
+
+        .hero-content h2 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #1f4068;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #162447;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #2980b9;
+        }
+
+        .btn-warning {
+            background: #f39c12;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #e67e22;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .featured-products,
+        .products-section {
+            padding: 80px 0;
+        }
+
+        .page-header {
+            background: white;
+            padding: 100px 0 40px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #162447;
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+        }
+
+        .featured-products h2,
+        .products-section h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #162447;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid #ecf0f1;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+        .product-image {
+            height: 280px;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-info h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: #162447;
+            line-height: 1.4;
+        }
+
+        .product-description {
+            color: #7f8c8d;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .product-price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #e74c3c;
+            margin-bottom: 1rem;
+        }
+
+        .genres-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            padding: 3rem 0;
+        }
+
+        .genre-card {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid #ecf0f1;
+        }
+
+        .genre-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+            background: #1f4068;
+            color: white;
+        }
+
+        .genre-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer {
+            background: #162447;
+            color: white;
+            padding: 3rem 0;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h4 {
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1002;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-wide {
+            max-width: 800px;
+        }
+
+        .modal-xl {
+            max-width: 1000px;
+            width: 95%;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #7f8c8d;
+            z-index: 1;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: #2ecc71;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 5px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 1001;
+            animation: slideIn 0.3s ease;
+        }
+
+        .admin-form {
+            display: grid;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #162447;
+        }
+
+        .form-control {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .admin-books-list {
+            margin-top: 2rem;
+        }
+
+        .admin-book-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid #ecf0f1;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            background: white;
+        }
+
+        .admin-book-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* Стили для подробного просмотра товара */
+        .product-detail {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
+        }
+
+        .product-detail-image {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .product-detail-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .product-detail-info h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #162447;
+        }
+
+        .product-detail-price {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #e74c3c;
+            margin-bottom: 1.5rem;
+        }
+
+        .product-detail-description {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #555;
+            margin-bottom: 2rem;
+        }
+
+        .product-detail-meta {
+            margin-bottom: 2rem;
+        }
+
+        .product-detail-meta p {
+            margin-bottom: 0.5rem;
+            color: #7f8c8d;
+        }
+
+        .product-detail-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* Стили для формы входа */
+        .login-form {
+            max-width: 400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .login-form h2 {
+            margin-bottom: 1.5rem;
+            color: #162447;
+        }
+
+        .login-error {
+            color: #e74c3c;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .admin-access {
+            position: relative;
+        }
+
+        .admin-logout {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .main-nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1rem;
+            }
+
+            .hero-content h2 {
+                font-size: 2rem;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero {
+                padding: 100px 0 60px;
+            }
+
+            .product-image {
+                height: 220px;
+            }
+
+            .admin-actions {
+                flex-direction: column;
+            }
+
+            .product-detail {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .product-detail-actions {
+                flex-direction: column;
+            }
+
+            .admin-book-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .admin-book-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>One's Reader Book Collection</h1>
+                </div>
+                <nav class="main-nav">
+                    <ul>
+                        <li><a href="#home" class="nav-link active" data-page="home">Главная</a></li>
+                        <li><a href="#genres" class="nav-link" data-page="genres">Выбор жанра</a></li>
+                        <li><a href="#business" class="nav-link" data-page="business">Бизнес литература</a></li>
+                        <li><a href="#children" class="nav-link" data-page="children">Книги для детей</a></li>
+                        <li><a href="#detectives" class="nav-link" data-page="detectives">Детективы</a></li>
+                        <!-- Ссылка на админ-панель теперь всегда видна -->
+                        <li><a href="#admin" class="nav-link" data-page="admin">Админ-панель</a></li>
+                    </ul>
+                </nav>
+                <div class="header-actions">
+                    <div class="cart" id="cart-icon">
+                        <span class="cart-icon">🛒</span>
+                        <span class="cart-count">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="home" class="page active">
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h2>Добро пожаловать в мир книг!</h2>
+                    <p>Откройте для себя лучшие произведения современных авторов и классиков</p>
+                    <button class="btn btn-primary" onclick="navigateTo('genres')">Выбрать жанр</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="featured-products">
+            <div class="container">
+                <h2>Популярные книги</h2>
+                <div class="products-grid" id="featured-books">
+                    <!-- Books will be loaded dynamically -->
+                </div>
+            </div>
+        </section>
+    </section>
+
+    <section id="genres" class="page">
+        <div class="page-header">
+            <div class="container">
+                <h1>Выбор жанра</h1>
+                <p>Выберите интересующий вас жанр литературы</p>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="genres-grid">
+                <div class="genre-card" onclick="navigateTo('business')">
+                    <div class="genre-icon">💼</div>
+                    <h3>Бизнес литература</h3>
+                    <p>Книги для предпринимателей и руководителей</p>
+                </div>
+
+                <div class="genre-card" onclick="navigateTo('children')">
+                    <div class="genre-icon">🧸</div>
+                    <h3>Детская литература</h3>
+                    <p>Книги для детей и подростков</p>
+                </div>
+
+                <div class="genre-card" onclick="navigateTo('detectives')">
+                    <div class="genre-icon">🕵️</div>
+                    <h3>Детективы</h3>
+                    <p>Захватывающие истории и расследования</p>
+                </div>
+
+                <div class="genre-card">
+                    <div class="genre-icon">📚</div>
+                    <h3>Фантастика</h3>
+                    <p>Миры будущего и параллельные реальности</p>
+                </div>
+
+                <div class="genre-card">
+                    <div class="genre-icon">❤️</div>
+                    <h3>Романы</h3>
+                    <p>Истории о любви и отношениях</p>
+                </div>
+
+                <div class="genre-card">
+                    <div class="genre-icon">🎭</div>
+                    <h3>Классика</h3>
+                    <p>Вечная литература всех времен</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="business" class="page">
+        <div class="page-header">
+            <div class="container">
+                <h1>Бизнес литература</h1>
+                <p>Книги для предпринимателей, руководителей и всех, кто стремится к успеху</p>
+            </div>
+        </div>
+
+        <section class="products-section">
+            <div class="container">
+                <div class="products-grid" id="business-books">
+                    <!-- Books will be loaded dynamically -->
+                </div>
+            </div>
+        </section>
+    </section>
+
+    <section id="children" class="page">
+        <div class="page-header">
+            <div class="container">
+                <h1>Книги для детей и подростков</h1>
+                <p>Увлекательные истории для юных читателей</p>
+            </div>
+        </div>
+
+        <section class="products-section">
+            <div class="container">
+                <div class="products-grid" id="children-books">
+                    <!-- Books will be loaded dynamically -->
+                </div>
+            </div>
+        </section>
+    </section>
+
+    <section id="detectives" class="page">
+        <div class="page-header">
+            <div class="container">
+                <h1>Детективы</h1>
+                <p>Захватывающие расследования и таинственные истории</p>
+            </div>
+        </div>
+
+        <section class="products-section">
+            <div class="container">
+                <div class="products-grid" id="detectives-books">
+                    <!-- Books will be loaded dynamically -->
+                </div>
+            </div>
+        </section>
+    </section>
+
+    <section id="admin" class="page">
+        <div class="page-header">
+            <div class="container">
+                <h1>Админ-панель</h1>
+                <p>Управление каталогом книг</p>
+            </div>
+        </div>
+
+        <section class="products-section">
+            <div class="container">
+                <div id="admin-login-section" style="text-align: center; display: none;">
+                    <h3>Для доступа к админ-панели требуется авторизация</h3>
+                    <button class="btn btn-primary" onclick="openLoginModal()">Войти в админ-панель</button>
+                </div>
+                
+                <div class="admin-access" id="admin-content" style="display: none;">
+                    <button class="admin-logout" onclick="logout()">Выйти</button>
+                    <div class="admin-actions">
+                        <button class="btn btn-primary" onclick="openAddBookModal()">Добавить книгу</button>
+                        <button class="btn btn-secondary" onclick="loadAdminBooks()">Обновить список</button>
+                    </div>
+
+                    <div class="admin-books-list" id="admin-books-list">
+                        <!-- Admin books will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>One's Reader Book Collection</h4>
+                    <p>Ваш надежный партнер в мире литературы</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Контакты</h4>
+                    <p>Email: info@readercollection.ru</p>
+                    <p>Телефон: +7 (999) 123-45-67</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Режим работы</h4>
+                    <p>Пн-Пт: 9:00-21:00</p>
+                    <p>Сб-Вс: 10:00-20:00</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cart Modal -->
+    <div class="modal" id="cart-modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeCart()">&times;</button>
+            <h2>Корзина</h2>
+            <div id="cart-items"></div>
+            <div id="cart-total" style="margin-top: 1rem; padding-top: 1rem; border-top: 2px solid #333; display: none;">
+                <strong>Итого: <span id="total-amount">0</span> ₽</strong>
+            </div>
+            <button class="btn btn-primary" id="checkout-btn" style="margin-top: 1rem; width: 100%; display: none;" onclick="checkout()">
+                Оформить заказ
+            </button>
+        </div>
+    </div>
+
+    <!-- Add Book Modal -->
+    <div class="modal" id="add-book-modal">
+        <div class="modal-content modal-wide">
+            <button class="close-modal" onclick="closeAddBookModal()">&times;</button>
+            <h2 id="book-modal-title">Добавить новую книгу</h2>
+            <form class="admin-form" id="add-book-form">
+                <input type="hidden" id="book-id">
+                <div class="form-group">
+                    <label for="book-title">Название книги</label>
+                    <input type="text" id="book-title" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="book-description">Краткое описание</label>
+                    <textarea id="book-description" class="form-control" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="book-full-description">Подробное описание</label>
+                    <textarea id="book-full-description" class="form-control" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="book-price">Цена (₽)</label>
+                    <input type="number" id="book-price" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="book-genre">Жанр</label>
+                    <select id="book-genre" class="form-control" required>
+                        <option value="featured">Популярные</option>
+                        <option value="business">Бизнес литература</option>
+                        <option value="children">Книги для детей</option>
+                        <option value="detectives">Детективы</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="book-image">Имя файла изображения (в папке images)</label>
+                    <input type="text" id="book-image" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary" id="book-modal-submit">Добавить книгу</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Product Detail Modal -->
+    <div class="modal" id="product-detail-modal">
+        <div class="modal-content modal-xl">
+            <button class="close-modal" onclick="closeProductDetail()">&times;</button>
+            <div id="product-detail-content">
+                <!-- Product detail content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal" id="login-modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeLoginModal()">&times;</button>
+            <div class="login-form">
+                <h2>Вход в админ-панель</h2>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="admin-password">Пароль</label>
+                        <input type="password" id="admin-password" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Войти</button>
+                </form>
+                <div class="login-error" id="login-error">
+                    Неверный пароль!
+                </div>
+                <p style="margin-top: 1rem; font-size: 0.9rem; color: #7f8c8d;">
+                    Подсказка: пароль по умолчанию - "admin123"
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Глобальные переменные
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let books = JSON.parse(localStorage.getItem('books')) || [
+            {
+                id: 1,
+                title: "Продавец обуви. Фил Найт.",
+                description: "История создания Nike от основателя компании",
+                fullDescription: "Эта книга - откровенная история создания одного из самых узнаваемых брендов в мире. Фил Найт, основатель Nike, делится своими воспоминаниями о том, как он начал с продажи кроссовок из багажника автомобиля и превратил свою компанию в мирового лидера спортивной индустрии. Вы узнаете о взлетах и падениях, о рисках и победах, о философии бизнеса, которая помогла Nike стать символом спортивных достижений.",
+                price: 890,
+                image: "./images/prodavec-obuvi.jpeg",
+                genre: "featured"
+            },
+            {
+                id: 2,
+                title: "Искусство сделки. Дональд Трамп.",
+                description: "Стратегии ведения бизнеса от известного предпринимателя",
+                fullDescription: "Дональд Трамп делится своими секретами успеха в мире бизнеса и недвижимости. В этой книге вы найдете уникальные стратегии ведения переговоров, создания бренда и принятия сложных решений. Трамп рассказывает о своих самых громких сделках, анализирует успехи и неудачи, предлагает практические советы для предпринимателей. Это must-read для всех, кто хочет научиться мыслить масштабно и добиваться выдающихся результатов в бизнесе.",
+                price: 750,
+                image: "./images/iskusstvo-sdelki.jpg",
+                genre: "featured"
+            },
+            {
+                id: 3,
+                title: "Тайное общество мистера Бенедикта. Трентон Ли Стюарт. Часть 1.",
+                description: "Захватывающие приключения для детей",
+                fullDescription: "Захватывающая история о группе необычных детей, которые получают шанс пройти сложные испытания и попасть в таинственную организацию. Главный герой - Рейн - мальчик с феноменальной памятью, который никогда не забывает ничего из того, что видел или слышал. Вместе с другими одаренными детьми он должен разгадать загадки, преодолеть опасности и раскрыть тайны, которые скрывает мистер Бенедикт. Эта книга учит дружбе, смелости и важности быть собой.",
+                price: 920,
+                image: "./images/tainoe-obschestvo-1.webp",
+                genre: "featured"
+            },
+            {
+                id: 4,
+                title: "Самый богатый человек в Вавилоне. Джордж Самюэль Клейсон.",
+                description: "Классика финансовой грамотности",
+                fullDescription: "Вечная классика финансовой литературы, которая учит основам управления деньгами через притчи о древнем Вавилоне. Книга предлагает простые, но эффективные принципы накопления богатства, инвестирования и финансовой независимости. Вы узнаете о 'семи лекарствах для тощего кошелька', 'пяти законах золота' и других мудрых советах, которые остаются актуальными спустя тысячи лет. Незаменимое чтение для тех, кто хочет взять под контроль свои финансы.",
+                price: 680,
+                image: "./images/bogatyj-chelovek.webp",
+                genre: "business"
+            },
+            {
+                id: 5,
+                title: "Удивительная история русского предпринимательства. В.Ю. Чумаков",
+                description: "История российского бизнеса",
+                fullDescription: "Эта книга раскрывает малоизвестные страницы истории российского предпринимательства от средневековья до наших дней. Вы узнаете о купцах-первопроходцах, промышленниках-новаторах, меценатах и благотворителях, которые внесли огромный вклад в развитие России. Книга рассказывает о взлетах и падениях предпринимательских династий, о создании первых фабрик и заводов, о сложных отношениях бизнеса и власти. Увлекательное чтение для всех, кто интересуется историей и экономикой.",
+                price: 920,
+                image: "./images/russkoe-predprinimatelstvo.webp",
+                genre: "business"
+            },
+            {
+                id: 6,
+                title: "Тойота. Путь к совершенству. Цунёси Нодзи.",
+                description: "Производственная система Toyota",
+                fullDescription: "Глубокое исследование производственной системы Toyota, которая стала эталоном эффективности для компаний по всему миру. Автор, бывший инженер Toyota, подробно описывает принципы 'бережливого производства', методы устранения потерь и подходы к непрерывному совершенствованию. Книга содержит практические кейсы, диаграммы и конкретные рекомендации по внедрению принципов Toyota в любой организации. Незаменимое руководство для менеджеров, инженеров и предпринимателей.",
+                price: 810,
+                image: "./images/toyota-put-k-sovershenstvu.webp",
+                genre: "business"
+            },
+            {
+                id: 7,
+                title: "Тайное общество мистера Бенедикта и опасное путешествие. Трентон Ли Стюарт. Часть 2.",
+                description: "Продолжение увлекательной истории",
+                fullDescription: "Вторая часть приключений Рейна и его друзей. Герои отправляются в опасное путешествие на таинственный остров, где их ждут новые испытания, загадки и встречи с неожиданными союзниками и противниками. Дружба ребят подвергается серьезным испытаниям, а их уникальные способности становятся ключом к разгадке новых тайн. Книга полна неожиданных поворотов, юмора и трогательных моментов, которые не оставят равнодушными ни детей, ни взрослых.",
+                price: 940,
+                image: "./images/tainoe-obschestvo-2.jpg",
+                genre: "children"
+            },
+            {
+                id: 8,
+                title: "Тайное общество мистера Бенедикта и дилемма заключённого. Трентон Ли Стюарт. Часть 3.",
+                description: "Завершение трилогии",
+                fullDescription: "Завершающая часть трилогии о тайном обществе. Герои сталкиваются с самой сложной дилеммой, которая проверяет на прочность их дружбу, смелость и преданность общему делу. Им предстоит принять трудные решения, от которых зависит судьба не только их организации, но и всего мира. Книга поднимает важные вопросы о морали, ответственности и ценности человеческих отношений. Захватывающий финал, который запомнится надолго.",
+                price: 960,
+                image: "./images/tainoe-obschestvo-3.jpg",
+                genre: "children"
+            },
+            {
+                id: 9,
+                title: "Тайное общество мистера Бенедикта и легенда о сокровище. Трентон Ли Стюарт.",
+                description: "Новые приключения общества Бенедикта",
+                fullDescription: "Новая история о приключениях полюбившихся героев. На этот раз ребята расследуют древнюю легенду о затерянном сокровище, которое может изменить судьбу человечества. Их ждут опасные погони, хитроумные головоломки и встречи с новыми загадочными персонажами. Книга сохраняет все лучшие качества серии: умный юмор, динамичный сюжет и глубокие размышления о дружбе и ответственности.",
+                price: 980,
+                image: "./images/tainoe-obschestvo-legend.jpg",
+                genre: "children"
+            },
+            {
+                id: 10,
+                title: "Дом из зеленого стекла. Часть 1.",
+                description: "Таинственный дом и его секреты",
+                fullDescription: "Загадочная история о старинном доме с привидениями и семье, которая решает в нем поселиться. Дети обнаруживают, что дом хранит множество тайн: потайные комнаты, старинные дневники, загадочные надписи. Постепенно они понимают, что дом - не просто строение, а живое существо со своей волей и памятью. Книга полна мистических элементов, семейных тайн и трогательных моментов взросления.",
+                price: 850,
+                image: "./images/dom-iz-zelenogo-stekla-1.jpg",
+                genre: "children"
+            },
+            {
+                id: 11,
+                title: "Дом из зеленого стекла. Часть 2.",
+                description: "Продолжение истории о загадочном доме",
+                fullDescription: "Продолжение мистической саги о Доме из зеленого стекла. Герои продолжают раскрывать тайны старого особняка, находя новые подсказки и сталкиваясь с неожиданными опасностями. Семейные тайны становятся все сложнее, а связь между обитателями дома и его прошлым - все теснее. Книга исследует темы семьи, памяти и того, как прошлое влияет на настоящее.",
+                price: 870,
+                image: "./images/dom-iz-zelenogo-stekla-2.jpg",
+                genre: "children"
+            },
+            {
+                id: 12,
+                title: "Воровской узел.",
+                description: "Продолжение истории Дома из зеленого стекла",
+                fullDescription: "Новая глава в истории Дома из зеленого стекла, где герои сталкиваются с самой серьезной угрозой. Таинственная организация, преследующая свои цели, угрожает разрушить хрупкое равновесие, установившееся в доме. Героям предстоит объединить силы, чтобы защитить свой дом и раскрыть многовековую тайну, которая может изменить их жизни навсегда.",
+                price: 890,
+                image: "./images/vorovskoj-uzel.jpg",
+                genre: "children"
+            },
+            {
+                id: 13,
+                title: "Убийство в Восточном экспрессе. Агата Кристи.",
+                description: "Классический детектив от королевы жанра",
+                fullDescription: "Один из самых знаменитых романов Агаты Кристи, в котором Эркюль Пуаро расследует загадочное убийство в роскошном поезде 'Восточный экспресс'. Поезд застревает в снежных заносах, а пассажир оказывается мертв при загадочных обстоятельствах. Каждый пассажир имеет алиби, но также и мотив. Пуаро должен разобраться в хитросплетении лжи, тайн и скрытых связей, чтобы найти убийцу. Блестящий детектив с неожиданной развязкой.",
+                price: 650,
+                image: "./images/ubijstvo-v-vostochnom-ekspresse.jpg",
+                genre: "detectives"
+            },
+            {
+                id: 14,
+                title: "Шерлок Холмс. Собрание сочинений. Артур Конан Дойл.",
+                description: "Полное собрание рассказов о великом сыщике",
+                fullDescription: "Полное собрание рассказов о самом знаменитом детективе в истории литературы - Шерлоке Холмсе. В этой книге вы найдете все приключения гениального сыщика и его верного друга доктора Ватсона: 'Этюд в багровых тонах', 'Знак четырех', 'Собака Баскервилей', а также все рассказы из цикла 'Приключения Шерлока Холмса' и 'Записки о Шерлоке Холмсе'. Бессмертные истории, которые заложили основы детективного жанра и продолжают восхищать читателей по всему миру.",
+                price: 1200,
+                image: "./images/sherlok-holms.webp",
+                genre: "detectives"
+            }
+        ];
+        
+        // Админ-пароль (измените на свой пароль)
+        const ADMIN_PASSWORD = "admin123";
+        
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartCount();
+            setupNavigation();
+            loadBooks();
+            setupAdminForm();
+            setupLoginForm();
+            checkAdminAccess();
+        });
+
+        // Проверка доступа к админ-панели
+        function checkAdminAccess() {
+            const isAdmin = localStorage.getItem('isAdmin') === 'true';
+            updateAdminUI(isAdmin);
+        }
+
+        function updateAdminUI(isAdmin) {
+            const loginSection = document.getElementById('admin-login-section');
+            const adminContent = document.getElementById('admin-content');
+            
+            if (isAdmin) {
+                loginSection.style.display = 'none';
+                adminContent.style.display = 'block';
+                loadAdminBooks();
+            } else {
+                loginSection.style.display = 'block';
+                adminContent.style.display = 'none';
+            }
+        }
+
+        // Навигация
+        function setupNavigation() {
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const page = this.dataset.page;
+                    
+                    navigateTo(page);
+                    
+                    // Если переходим в админ-панель, проверяем авторизацию
+                    if (page === 'admin') {
+                        checkAdminAccess();
+                    }
+                });
+            });
+        }
+
+        function navigateTo(page) {
+            document.querySelectorAll('.page').forEach(p => {
+                p.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            document.getElementById(page).classList.add('active');
+            document.querySelector(`.nav-link[data-page="${page}"]`).classList.add('active');
+            
+            window.scrollTo(0, 0);
+        }
+
+        // Форма входа
+        function setupLoginForm() {
+            document.getElementById('login-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const password = document.getElementById('admin-password').value;
+                
+                if (password === ADMIN_PASSWORD) {
+                    localStorage.setItem('isAdmin', 'true');
+                    closeLoginModal();
+                    updateAdminUI(true);
+                    showNotification('Успешный вход в админ-панель!');
+                } else {
+                    document.getElementById('login-error').style.display = 'block';
+                }
+            });
+        }
+
+        function openLoginModal() {
+            document.getElementById('login-modal').classList.add('active');
+        }
+
+        function closeLoginModal() {
+            document.getElementById('login-modal').classList.remove('active');
+            document.getElementById('login-form').reset();
+            document.getElementById('login-error').style.display = 'none';
+        }
+
+        function logout() {
+            localStorage.removeItem('isAdmin');
+            updateAdminUI(false);
+            showNotification('Вы вышли из админ-панели');
+        }
+
+        // Загрузка книг
+        function loadBooks() {
+            saveBooks();
+            
+            // Загружаем популярные книги
+            const featuredBooks = books.filter(book => book.genre === 'featured');
+            renderBooks(featuredBooks, 'featured-books');
+            
+            // Загружаем книги по жанрам
+            const businessBooks = books.filter(book => book.genre === 'business');
+            renderBooks(businessBooks, 'business-books');
+            
+            const childrenBooks = books.filter(book => book.genre === 'children');
+            renderBooks(childrenBooks, 'children-books');
+            
+            const detectivesBooks = books.filter(book => book.genre === 'detectives');
+            renderBooks(detectivesBooks, 'detectives-books');
+        }
+
+        function renderBooks(books, containerId) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            if (books.length === 0) {
+                container.innerHTML = '<p>В этой категории пока нет книг</p>';
+                return;
+            }
+            
+            container.innerHTML = books.map(book => `
+                <div class="product-card" onclick="showProductDetail(${book.id})">
+                    <div class="product-image">
+                        <img src="${book.image}" alt="${book.title}" onerror="this.src='https://via.placeholder.com/300x400/3498db/ffffff?text=Обложка+книги'">
+                    </div>
+                    <div class="product-info">
+                        <h3>${book.title}</h3>
+                        <p class="product-description">${book.description}</p>
+                        <p class="product-price">${book.price} ₽</p>
+                        <button class="btn btn-secondary" onclick="event.stopPropagation(); addToCart('${book.title}', ${book.price})">В корзину</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Подробный просмотр товара
+        function showProductDetail(bookId) {
+            const book = books.find(b => b.id === bookId);
+            if (!book) return;
+            
+            const content = document.getElementById('product-detail-content');
+            content.innerHTML = `
+                <div class="product-detail">
+                    <div class="product-detail-image">
+                        <img src="${book.image}" alt="${book.title}" onerror="this.src='https://via.placeholder.com/500x700/3498db/ffffff?text=Обложка+книги'">
+                    </div>
+                    <div class="product-detail-info">
+                        <h2>${book.title}</h2>
+                        <div class="product-detail-price">${book.price} ₽</div>
+                        <div class="product-detail-description">
+                            ${book.fullDescription}
+                        </div>
+                        <div class="product-detail-meta">
+                            <p><strong>Жанр:</strong> ${getGenreName(book.genre)}</p>
+                            <p><strong>Доставка:</strong> 1-3 рабочих дня</p>
+                            <p><strong>Возврат:</strong> В течение 14 дней</p>
+                        </div>
+                        <div class="product-detail-actions">
+                            <button class="btn btn-primary" onclick="addToCart('${book.title}', ${book.price}); closeProductDetail();">Добавить в корзину</button>
+                            <button class="btn btn-secondary" onclick="closeProductDetail()">Продолжить покупки</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('product-detail-modal').classList.add('active');
+        }
+
+        function closeProductDetail() {
+            document.getElementById('product-detail-modal').classList.remove('active');
+        }
+
+        // Админ-панель
+        function setupAdminForm() {
+            document.getElementById('add-book-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const bookId = document.getElementById('book-id').value;
+                if (bookId) {
+                    updateBook(bookId);
+                } else {
+                    addNewBook();
+                }
+            });
+        }
+
+        function openAddBookModal() {
+            document.getElementById('book-modal-title').textContent = 'Добавить новую книгу';
+            document.getElementById('book-modal-submit').textContent = 'Добавить книгу';
+            document.getElementById('book-id').value = '';
+            document.getElementById('add-book-form').reset();
+            document.getElementById('add-book-modal').classList.add('active');
+        }
+
+        function openEditBookModal(bookId) {
+            const book = books.find(b => b.id === bookId);
+            if (!book) return;
+            
+            document.getElementById('book-modal-title').textContent = 'Редактировать книгу';
+            document.getElementById('book-modal-submit').textContent = 'Сохранить изменения';
+            document.getElementById('book-id').value = book.id;
+            document.getElementById('book-title').value = book.title;
+            document.getElementById('book-description').value = book.description;
+            document.getElementById('book-full-description').value = book.fullDescription;
+            document.getElementById('book-price').value = book.price;
+            document.getElementById('book-genre').value = book.genre;
+            document.getElementById('book-image').value = book.image.replace('./images/', '');
+            
+            document.getElementById('add-book-modal').classList.add('active');
+        }
+
+        function closeAddBookModal() {
+            document.getElementById('add-book-modal').classList.remove('active');
+        }
+
+        function addNewBook() {
+            const title = document.getElementById('book-title').value;
+            const description = document.getElementById('book-description').value;
+            const fullDescription = document.getElementById('book-full-description').value;
+            const price = parseInt(document.getElementById('book-price').value);
+            const genre = document.getElementById('book-genre').value;
+            const image = document.getElementById('book-image').value;
+            
+            const newBook = {
+                id: Date.now(),
+                title,
+                description,
+                fullDescription,
+                price,
+                genre,
+                image: `./images/${image}`
+            };
+            
+            books.push(newBook);
+            saveBooks();
+            loadBooks();
+            closeAddBookModal();
+            showNotification('Книга успешно добавлена!');
+            
+            // Если мы в админ-панели, обновляем список
+            if (document.getElementById('admin').classList.contains('active')) {
+                loadAdminBooks();
+            }
+        }
+
+        function updateBook(bookId) {
+            const title = document.getElementById('book-title').value;
+            const description = document.getElementById('book-description').value;
+            const fullDescription = document.getElementById('book-full-description').value;
+            const price = parseInt(document.getElementById('book-price').value);
+            const genre = document.getElementById('book-genre').value;
+            const image = document.getElementById('book-image').value;
+            
+            const bookIndex = books.findIndex(book => book.id === parseInt(bookId));
+            if (bookIndex !== -1) {
+                books[bookIndex] = {
+                    ...books[bookIndex],
+                    title,
+                    description,
+                    fullDescription,
+                    price,
+                    genre,
+                    image: `./images/${image}`
+                };
+                
+                saveBooks();
+                loadBooks();
+                closeAddBookModal();
+                showNotification('Книга успешно обновлена!');
+                
+                // Если мы в админ-панели, обновляем список
+                if (document.getElementById('admin').classList.contains('active')) {
+                    loadAdminBooks();
+                }
+            }
+        }
+
+        function loadAdminBooks() {
+            const container = document.getElementById('admin-books-list');
+            if (!container) return;
+            
+            if (books.length === 0) {
+                container.innerHTML = '<p>В каталоге пока нет книг</p>';
+                return;
+            }
+            
+            container.innerHTML = books.map(book => `
+                <div class="admin-book-item">
+                    <div>
+                        <h4>${book.title}</h4>
+                        <p>${book.description} | ${book.price} ₽ | ${getGenreName(book.genre)}</p>
+                    </div>
+                    <div class="admin-book-actions">
+                        <button class="btn btn-warning" onclick="openEditBookModal(${book.id})">Редактировать</button>
+                        <button class="btn btn-danger" onclick="deleteBook(${book.id})">Удалить</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getGenreName(genre) {
+            const genres = {
+                'business': 'Бизнес литература',
+                'children': 'Книги для детей',
+                'detectives': 'Детективы',
+                'featured': 'Популярные'
+            };
+            return genres[genre] || genre;
+        }
+
+        function deleteBook(id) {
+            if (confirm('Вы уверены, что хотите удалить эту книгу?')) {
+                books = books.filter(book => book.id !== id);
+                saveBooks();
+                loadBooks();
+                loadAdminBooks();
+                showNotification('Книга удалена!');
+            }
+        }
+
+        function saveBooks() {
+            localStorage.setItem('books', JSON.stringify(books));
+        }
+
+        // Корзина
+        function addToCart(product, price) {
+            cart.push({ product, price });
+            saveCart();
+            updateCartCount();
+            showNotification(`${product} добавлен в корзину`);
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            saveCart();
+            updateCartCount();
+            showCart();
+        }
+
+        function updateCartCount() {
+            document.querySelector('.cart-count').textContent = cart.length;
+        }
+
+        function saveCart() {
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
+
+        function showCart() {
+            const cartItems = document.getElementById('cart-items');
+            const cartTotal = document.getElementById('cart-total');
+            const checkoutBtn = document.getElementById('checkout-btn');
+            const totalAmount = document.getElementById('total-amount');
+
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p>Корзина пуста</p>';
+                cartTotal.style.display = 'none';
+                checkoutBtn.style.display = 'none';
+            } else {
+                const total = cart.reduce((sum, item) => sum + item.price, 0);
+                cartItems.innerHTML = cart.map((item, index) => `
+                    <div class="cart-item">
+                        <span>${item.product}</span>
+                        <div>
+                            <span style="margin-right: 1rem;">${item.price} ₽</span>
+                            <button onclick="removeFromCart(${index})" style="
+                                background: #e74c3c;
+                                color: white;
+                                border: none;
+                                padding: 5px 10px;
+                                border-radius: 3px;
+                                cursor: pointer;
+                            ">Удалить</button>
+                        </div>
+                    </div>
+                `).join('');
+
+                totalAmount.textContent = total;
+                cartTotal.style.display = 'block';
+                checkoutBtn.style.display = 'block';
+            }
+
+            document.getElementById('cart-modal').classList.add('active');
+        }
+
+        function closeCart() {
+            document.getElementById('cart-modal').classList.remove('active');
+        }
+
+        function checkout() {
+            if (cart.length === 0) {
+                alert('Корзина пуста');
+                return;
+            }
+
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            const productList = cart.map(item => `• ${item.product} - ${item.price} ₽`).join('\n');
+            
+            alert(`Заказ оформлен! Сумма: ${total} ₽\n\nТовары:\n${productList}\n\nСпасибо за покупку!`);
+            
+            cart = [];
+            saveCart();
+            updateCartCount();
+            closeCart();
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Обработчики событий
+        document.getElementById('cart-icon').addEventListener('click', showCart);
+
+        // Закрытие модальных окон при клике вне их
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('modal')) {
+                closeCart();
+                closeAddBookModal();
+                closeProductDetail();
+                closeLoginModal();
+            }
+        });
+    </script>
+</body>
+</html>
