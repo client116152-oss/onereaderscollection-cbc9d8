@@ -838,13 +838,9 @@
                     <input type="number" id="book-price" class="form-control" required>
                 </div>
                 <div class="form-group">
-                    <label for="book-genre">Жанр</label>
-                    <select id="book-genre" class="form-control" required>
-                        <option value="featured">Популярные</option>
-                        <option value="business">Бизнес литература</option>
-                        <option value="children">Книги для детей</option>
-                        <option value="detectives">Детективы</option>
-                    </select>
+                    <label for="book-categories">Категории (через запятую)</label>
+                    <input type="text" id="book-categories" class="form-control" required placeholder="featured,business">
+                    <small>Доступные категории: featured, business, children, detectives</small>
                 </div>
                 <div class="form-group">
                     <label for="book-image">Имя файла изображения (в папке images)</label>
@@ -899,7 +895,7 @@
                 fullDescription: "Эта книга - откровенная история создания одного из самых узнаваемых брендов в мире. Фил Найт, основатель Nike, делится своими воспоминаниями о том, как он начал с продажи кроссовок из багажника автомобиля и превратил свою компанию в мирового лидера спортивной индустрии. Вы узнаете о взлетах и падениях, о рисках и победах, о философии бизнеса, которая помогла Nike стать символом спортивных достижений.",
                 price: 890,
                 image: "images/prodavec-obuvi.jpeg",
-                genre: "featured"
+                categories: ["featured", "business"]
             },
             {
                 id: 2,
@@ -908,7 +904,7 @@
                 fullDescription: "Дональд Трамп делится своими секретами успеха в мире бизнеса и недвижимости. В этой книге вы найдете уникальные стратегии ведения переговоров, создания бренда и принятия сложных решений. Трамп рассказывает о своих самых громких сделках, анализирует успехи и неудачи, предлагает практические советы для предпринимателей. Это must-read для всех, кто хочет научиться мыслить масштабно и добиваться выдающихся результатов в бизнесе.",
                 price: 750,
                 image: "images/iskusstvo-sdelki.jpg",
-                genre: "featured"
+                categories: ["featured", "business"]
             },
             {
                 id: 3,
@@ -917,7 +913,7 @@
                 fullDescription: "Захватывающая история о группе необычных детей, которые получают шанс пройти сложные испытания и попасть в таинственную организацию. Главный герой - Рейн - мальчик с феноменальной памятью, который никогда не забывает ничего из того, что видел или слышал. Вместе с другими одаренными детьми он должен разгадать загадки, преодолеть опасности и раскрыть тайны, которые скрывает мистер Бенедикт. Эта книга учит дружбе, смелости и важности быть собой.",
                 price: 920,
                 image: "images/tainoe-obschestvo-1.webp",
-                genre: "featured"
+                categories: ["featured", "children"]
             },
             {
                 id: 4,
@@ -926,7 +922,7 @@
                 fullDescription: "Вечная классика финансовой литературы, которая учит основам управления деньгами через притчи о древнем Вавилоне. Книга предлагает простые, но эффективные принципы накопления богатства, инвестирования и финансовой независимости. Вы узнаете о 'семи лекарствах для тощего кошелька', 'пяти законах золота' и других мудрых советах, которые остаются актуальными спустя тысячи лет. Незаменимое чтение для тех, кто хочет взять под контроль свои финансы.",
                 price: 680,
                 image: "images/bogatyj-chelovek.webp",
-                genre: "business"
+                categories: ["business"]
             },
             {
                 id: 5,
@@ -935,7 +931,7 @@
                 fullDescription: "Эта книга раскрывает малоизвестные страницы истории российского предпринимательства от средневековья до наших дней. Вы узнаете о купцах-первопроходцах, промышленниках-новаторах, меценатах и благотворителях, которые внесли огромный вклад в развитие России. Книга рассказывает о взлетах и падениях предпринимательских династий, о создании первых фабрик и заводов, о сложных отношениях бизнеса и власти. Увлекательное чтение для всех, кто интересуется историей и экономикой.",
                 price: 920,
                 image: "images/russkoe-predprinimatelstvo.webp",
-                genre: "business"
+                categories: ["business"]
             },
             {
                 id: 6,
@@ -944,7 +940,7 @@
                 fullDescription: "Глубокое исследование производственной системы Toyota, которая стала эталоном эффективности для компаний по всему миру. Автор, бывший инженер Toyota, подробно описывает принципы 'бережливого производства', методы устранения потерь и подходы к непрерывному совершенствованию. Книга содержит практические кейсы, диаграммы и конкретные рекомендации по внедрению принципов Toyota в любой организации. Незаменимое руководство для менеджеров, инженеров и предпринимателей.",
                 price: 810,
                 image: "images/toyota-put-k-sovershenstvu.webp",
-                genre: "business"
+                categories: ["business"]
             },
             {
                 id: 7,
@@ -953,7 +949,7 @@
                 fullDescription: "Вторая часть приключений Рейна и его друзей. Герои отправляются в опасное путешествие на таинственный остров, где их ждут новые испытания, загадки и встречи с неожиданными союзниками и противниками. Дружба ребят подвергается серьезным испытаниям, а их уникальные способности становятся ключом к разгадке новых тайн. Книга полна неожиданных поворотов, юмора и трогательных моментов, которые не оставят равнодушными ни детей, ни взрослых.",
                 price: 940,
                 image: "images/tainoe-obschestvo-2.jpg",
-                genre: "children"
+                categories: ["children"]
             },
             {
                 id: 8,
@@ -962,7 +958,7 @@
                 fullDescription: "Завершающая часть трилогии о тайном обществе. Герои сталкиваются с самой сложной дилеммой, которая проверяет на прочность их дружбу, смелость и преданность общему делу. Им предстоит принять трудные решения, от которых зависит судьба не только их организации, но и всего мира. Книга поднимает важные вопросы о морали, ответственности и ценности человеческих отношений. Захватывающий финал, который запомнится надолго.",
                 price: 960,
                 image: "images/tainoe-obschestvo-3.jpg",
-                genre: "children"
+                categories: ["children"]
             },
             {
                 id: 9,
@@ -971,16 +967,16 @@
                 fullDescription: "Новая история о приключениях полюбившихся героев. На этот раз ребята расследуют древнюю легенду о затерянном сокровище, которое может изменить судьбу человечества. Их ждут опасные погони, хитроумные головоломки и встречи с новыми загадочными персонажами. Книга сохраняет все лучшие качества серии: умный юмор, динамичный сюжет и глубокие размышления о дружбе и ответственности.",
                 price: 980,
                 image: "images/tainoe-obschestvo-legend.jpg",
-                genre: "children"
+                categories: ["children"]
             },
             {
                 id: 10,
                 title: "Дом из зеленого стекла. Часть 1.",
                 description: "Таинственный дом и его секреты",
-                fullDescription: "Загадочная история о старинном доме с привидениями и семье, которая решает в нем поселиться. Дети обнаруживают, что дом хранит множество тайн: потайные комнаты, старинные дневники, загадочные надписи. Постепенно они понимают, что дом - не просто строение, а живое существо со своей волей и памятью. Книга полна мистических элементов, семейных тайн и трогательных моментов взросления.",
+                fullDescription: "Загадочная история о старинном доме с привидениями и семье, которая решает в нем поселиться. Дети обнаруживают, что дом хранит множество тайн: потайные комната, старинные дневники, загадочные надписи. Постепенно они понимают, что дом - не просто строение, а живое существо со своей волей и памятью. Книга полна мистических элементов, семейных тайн и трогательных моментов взросления.",
                 price: 850,
                 image: "images/dom-iz-zelenogo-stekla-1.jpg",
-                genre: "children"
+                categories: ["children"]
             },
             {
                 id: 11,
@@ -989,7 +985,7 @@
                 fullDescription: "Продолжение мистической саги о Доме из зеленого стекла. Герои продолжают раскрывать тайны старого особняка, находя новые подсказки и сталкиваясь с неожиданными опасностями. Семейные тайны становятся все сложнее, а связь между обитателями дома и его прошлым - все теснее. Книга исследует темы семьи, памяти и того, как прошлое влияет на настоящее.",
                 price: 870,
                 image: "images/dom-iz-zelenogo-stekla-2.jpg",
-                genre: "children"
+                categories: ["children"]
             },
             {
                 id: 12,
@@ -998,16 +994,16 @@
                 fullDescription: "Новая глава в истории Дома из зеленого стекла, где герои сталкиваются с самой серьезной угрозой. Таинственная организация, преследующая свои цели, угрожает разрушить хрупкое равновесие, установившееся в доме. Героям предстоит объединить силы, чтобы защитить свой дом и раскрыть многовековую тайну, которая может изменить их жизни навсегда.",
                 price: 890,
                 image: "images/vorovskoj-uzel.jpg",
-                genre: "children"
+                categories: ["children"]
             },
             {
                 id: 13,
                 title: "Убийство в Восточном экспрессе. Агата Кристи.",
                 description: "Классический детектив от королевы жанра",
-                fullDescription: "Один из самых знаменитых романов Агаты Кристи, в котором Эркюль Пуаро расследует загадочное убийство в роскошном поезде 'Восточный экспресс'. Поезд застревает в снежных заносах, а пассажир оказывается мертв при загадочных обстоятельствах. Каждый пассажир имеет алиби, но также и мотив. Пуаро должен разобраться в хитросплетении лжи, тайн и скрытых связей, чтобы найти убийцу. Блестящий детектив с неожиданной развязкой.",
+                fullDescription: "Один из самых знаменитых романов Агата Кристи, в котором Эркюль Пуаро расследует загадочное убийство в роскошном поезде 'Восточный экспресс'. Поезд застревает в снежных заносах, а пассажир оказывается мертв при загадочных обстоятельствах. Каждый пассажир имеет алиби, но также и мотив. Пуаро должен разобраться в хитросплетении лжи, тайн и скрытых связей, чтобы найти убийцу. Блестящий детектив с неожиданной развязкой.",
                 price: 650,
                 image: "images/ubijstvo-v-vostochnom-ekspresse.jpg",
-                genre: "detectives"
+                categories: ["detectives"]
             },
             {
                 id: 14,
@@ -1016,7 +1012,7 @@
                 fullDescription: "Полное собрание рассказов о самом знаменитом детективе в истории литературы - Шерлоке Холмсе. В этой книге вы найдете все приключения гениального сыщика и его верного друга доктора Ватсона: 'Этюд в багровых тонах', 'Знак четырех', 'Собака Баскервилей', а также все рассказы из цикла 'Приключения Шерлока Холмса' и 'Записки о Шерлоке Холмсе'. Бессмертные истории, которые заложили основы детективного жанра и продолжают восхищать читателей по всему миру.",
                 price: 1200,
                 image: "images/sherlok-holms.webp",
-                genre: "detectives"
+                categories: ["detectives"]
             }
         ];
         
@@ -1122,18 +1118,18 @@
         function loadBooks() {
             saveBooks();
             
-            // Загружаем популярные книги
-            const featuredBooks = books.filter(book => book.genre === 'featured');
+            // Загружаем популярные книги (категория featured)
+            const featuredBooks = books.filter(book => book.categories.includes('featured'));
             renderBooks(featuredBooks, 'featured-books');
             
             // Загружаем книги по жанрам
-            const businessBooks = books.filter(book => book.genre === 'business');
+            const businessBooks = books.filter(book => book.categories.includes('business'));
             renderBooks(businessBooks, 'business-books');
             
-            const childrenBooks = books.filter(book => book.genre === 'children');
+            const childrenBooks = books.filter(book => book.categories.includes('children'));
             renderBooks(childrenBooks, 'children-books');
             
-            const detectivesBooks = books.filter(book => book.genre === 'detectives');
+            const detectivesBooks = books.filter(book => book.categories.includes('detectives'));
             renderBooks(detectivesBooks, 'detectives-books');
         }
 
@@ -1179,7 +1175,7 @@
                             ${book.fullDescription}
                         </div>
                         <div class="product-detail-meta">
-                            <p><strong>Жанр:</strong> ${getGenreName(book.genre)}</p>
+                            <p><strong>Категории:</strong> ${book.categories.map(cat => getCategoryName(cat)).join(', ')}</p>
                             <p><strong>Доставка:</strong> 1-3 рабочих дня</p>
                             <p><strong>Возврат:</strong> В течение 14 дней</p>
                         </div>
@@ -1230,7 +1226,7 @@
             document.getElementById('book-description').value = book.description;
             document.getElementById('book-full-description').value = book.fullDescription;
             document.getElementById('book-price').value = book.price;
-            document.getElementById('book-genre').value = book.genre;
+            document.getElementById('book-categories').value = book.categories.join(',');
             document.getElementById('book-image').value = book.image.replace('images/', '');
             
             document.getElementById('add-book-modal').classList.add('active');
@@ -1245,7 +1241,7 @@
             const description = document.getElementById('book-description').value;
             const fullDescription = document.getElementById('book-full-description').value;
             const price = parseInt(document.getElementById('book-price').value);
-            const genre = document.getElementById('book-genre').value;
+            const categories = document.getElementById('book-categories').value.split(',').map(cat => cat.trim());
             const image = document.getElementById('book-image').value;
             
             const newBook = {
@@ -1254,7 +1250,7 @@
                 description,
                 fullDescription,
                 price,
-                genre,
+                categories,
                 image: `images/${image}`
             };
             
@@ -1275,7 +1271,7 @@
             const description = document.getElementById('book-description').value;
             const fullDescription = document.getElementById('book-full-description').value;
             const price = parseInt(document.getElementById('book-price').value);
-            const genre = document.getElementById('book-genre').value;
+            const categories = document.getElementById('book-categories').value.split(',').map(cat => cat.trim());
             const image = document.getElementById('book-image').value;
             
             const bookIndex = books.findIndex(book => book.id === parseInt(bookId));
@@ -1286,7 +1282,7 @@
                     description,
                     fullDescription,
                     price,
-                    genre,
+                    categories,
                     image: `images/${image}`
                 };
                 
@@ -1315,7 +1311,7 @@
                 <div class="admin-book-item">
                     <div>
                         <h4>${book.title}</h4>
-                        <p>${book.description} | ${book.price} ₽ | ${getGenreName(book.genre)}</p>
+                        <p>${book.description} | ${book.price} ₽ | ${book.categories.map(cat => getCategoryName(cat)).join(', ')}</p>
                     </div>
                     <div class="admin-book-actions">
                         <button class="btn btn-warning" onclick="openEditBookModal(${book.id})">Редактировать</button>
@@ -1325,14 +1321,14 @@
             `).join('');
         }
 
-        function getGenreName(genre) {
-            const genres = {
+        function getCategoryName(category) {
+            const categories = {
                 'business': 'Бизнес литература',
                 'children': 'Книги для детей',
                 'detectives': 'Детективы',
                 'featured': 'Популярные'
             };
-            return genres[genre] || genre;
+            return categories[category] || category;
         }
 
         function deleteBook(id) {
