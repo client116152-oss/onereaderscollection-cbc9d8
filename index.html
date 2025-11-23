@@ -887,7 +887,9 @@
     <script>
         // Глобальные переменные
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
-        let books = JSON.parse(localStorage.getItem('books')) || [
+        
+        // Определение начальных данных книг
+        const initialBooks = [
             // ПОПУЛЯРНЫЕ КНИГИ (3 книги)
             {
                 id: 1,
@@ -1049,6 +1051,15 @@
                 genre: "detectives"
             }
         ];
+        
+        // Загружаем книги из localStorage или используем начальные данные
+        let books = JSON.parse(localStorage.getItem('books'));
+        
+        // Если в localStorage нет книг или количество книг не совпадает с ожидаемым, используем начальные данные
+        if (!books || books.length !== 17) {
+            books = [...initialBooks];
+            localStorage.setItem('books', JSON.stringify(books));
+        }
         
         // Админ-пароль
         const ADMIN_PASSWORD = "admin123";
