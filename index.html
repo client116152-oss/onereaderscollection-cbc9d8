@@ -172,6 +172,15 @@
             background: #c0392b;
         }
 
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #229954;
+        }
+
         .featured-products,
         .products-section {
             padding: 80px 0;
@@ -530,6 +539,122 @@
             font-size: 0.8rem;
         }
 
+        .order-summary {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .order-total {
+            font-weight: bold;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid #ddd;
+        }
+
+        .admin-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 1rem;
+        }
+
+        .admin-tab {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            color: #7f8c8d;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+
+        .admin-tab.active {
+            color: #162447;
+            border-bottom-color: #162447;
+        }
+
+        .order-card {
+            background: white;
+            border: 1px solid #ecf0f1;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .order-id {
+            font-weight: bold;
+            color: #162447;
+        }
+
+        .order-date {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .order-customer {
+            margin-bottom: 1rem;
+        }
+
+        .order-items {
+            margin-bottom: 1rem;
+        }
+
+        .order-item-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.3rem 0;
+        }
+
+        .order-status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .status-new {
+            background: #3498db;
+            color: white;
+        }
+
+        .status-processing {
+            background: #f39c12;
+            color: white;
+        }
+
+        .status-completed {
+            background: #27ae60;
+            color: white;
+        }
+
+        .order-actions {
+            margin-top: 1rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
         @keyframes slideIn {
             from {
                 transform: translateX(100%);
@@ -591,6 +716,16 @@
             .admin-book-actions {
                 width: 100%;
                 justify-content: flex-end;
+            }
+
+            .admin-tabs {
+                flex-direction: column;
+            }
+
+            .order-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
             }
         }
     </style>
@@ -748,7 +883,7 @@
         <div class="page-header">
             <div class="container">
                 <h1>Админ-панель</h1>
-                <p>Управление каталогом книг</p>
+                <p>Управление каталогом книг и заказами</p>
             </div>
         </div>
 
@@ -761,13 +896,31 @@
                 
                 <div class="admin-access" id="admin-content" style="display: none;">
                     <button class="admin-logout" onclick="logout()">Выйти</button>
-                    <div class="admin-actions">
-                        <button class="btn btn-primary" onclick="openAddBookModal()">Добавить книгу</button>
-                        <button class="btn btn-secondary" onclick="loadAdminBooks()">Обновить список</button>
+                    
+                    <div class="admin-tabs">
+                        <button class="admin-tab active" data-tab="books">Управление книгами</button>
+                        <button class="admin-tab" data-tab="orders">Заказы</button>
                     </div>
 
-                    <div class="admin-books-list" id="admin-books-list">
-                        <!-- Admin books will be loaded here -->
+                    <div id="admin-books-section">
+                        <div class="admin-actions">
+                            <button class="btn btn-primary" onclick="openAddBookModal()">Добавить книгу</button>
+                            <button class="btn btn-secondary" onclick="loadAdminBooks()">Обновить список</button>
+                        </div>
+
+                        <div class="admin-books-list" id="admin-books-list">
+                            <!-- Admin books will be loaded here -->
+                        </div>
+                    </div>
+
+                    <div id="admin-orders-section" style="display: none;">
+                        <div class="admin-actions">
+                            <button class="btn btn-secondary" onclick="loadAdminOrders()">Обновить заказы</button>
+                        </div>
+                        
+                        <div id="admin-orders-list">
+                            <!-- Orders will be loaded here -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -804,9 +957,66 @@
             <div id="cart-total" style="margin-top: 1rem; padding-top: 1rem; border-top: 2px solid #333; display: none;">
                 <strong>Итого: <span id="total-amount">0</span> ₽</strong>
             </div>
-            <button class="btn btn-primary" id="checkout-btn" style="margin-top: 1rem; width: 100%; display: none;" onclick="checkout()">
+            <button class="btn btn-primary" id="checkout-btn" style="margin-top: 1rem; width: 100%; display: none;" onclick="openOrderForm()">
                 Оформить заказ
             </button>
+        </div>
+    </div>
+
+    <!-- Order Form Modal -->
+    <div class="modal" id="order-modal">
+        <div class="modal-content modal-wide">
+            <button class="close-modal" onclick="closeOrderModal()">&times;</button>
+            <h2>Оформление заказа</h2>
+            
+            <div class="order-summary" id="order-summary">
+                <!-- Order items will be loaded here -->
+            </div>
+            
+            <form id="order-form" class="admin-form" action="https://formspree.io/f/xeoyelpr" method="POST">
+                <input type="hidden" name="_subject" value="Новый заказ из книжного магазина">
+                <input type="hidden" name="_replyto" id="form-email">
+                <input type="hidden" name="order_details" id="order-details">
+                <input type="hidden" name="total_amount" id="form-total">
+                
+                <div class="form-group">
+                    <label for="customer-name">Ваше имя *</label>
+                    <input type="text" id="customer-name" name="customer_name" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="customer-email">Электронная почта *</label>
+                    <input type="email" id="customer-email" name="email" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="customer-phone">Телефон *</label>
+                    <input type="tel" id="customer-phone" name="phone" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="customer-address">Адрес доставки *</label>
+                    <textarea id="customer-address" name="address" class="form-control" required placeholder="Улица, дом, квартира, индекс"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="customer-comment">Комментарий к заказу</label>
+                    <textarea id="customer-comment" name="comment" class="form-control" placeholder="Дополнительные пожелания"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="payment-method">Способ оплаты</label>
+                    <select id="payment-method" name="payment_method" class="form-control">
+                        <option value="card">Картой онлайн</option>
+                        <option value="cash">Наличными при получении</option>
+                        <option value="card_courier">Картой курьеру</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn btn-success" style="width: 100%; padding: 15px; font-size: 1.1rem;">
+                    Подтвердить заказ
+                </button>
+            </form>
         </div>
     </div>
 
@@ -887,6 +1097,7 @@
     <script>
         // Глобальные переменные
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let orders = JSON.parse(localStorage.getItem('orders')) || [];
         
         // Определение начальных данных книг
         const initialBooks = [
@@ -1071,6 +1282,8 @@
             loadBooks();
             setupAdminForm();
             setupLoginForm();
+            setupOrderForm();
+            setupAdminTabs();
             checkAdminAccess();
         });
 
@@ -1092,6 +1305,33 @@
                 loginSection.style.display = 'block';
                 adminContent.style.display = 'none';
             }
+        }
+
+        // Настройка вкладок админ-панели
+        function setupAdminTabs() {
+            document.querySelectorAll('.admin-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabName = this.dataset.tab;
+                    
+                    // Убираем активный класс у всех вкладок
+                    document.querySelectorAll('.admin-tab').forEach(t => {
+                        t.classList.remove('active');
+                    });
+                    
+                    // Добавляем активный класс текущей вкладке
+                    this.classList.add('active');
+                    
+                    // Показываем соответствующий раздел
+                    if (tabName === 'books') {
+                        document.getElementById('admin-books-section').style.display = 'block';
+                        document.getElementById('admin-orders-section').style.display = 'none';
+                    } else if (tabName === 'orders') {
+                        document.getElementById('admin-books-section').style.display = 'none';
+                        document.getElementById('admin-orders-section').style.display = 'block';
+                        loadAdminOrders();
+                    }
+                });
+            });
         }
 
         // Навигация
@@ -1366,6 +1606,97 @@
             `).join('');
         }
 
+        function loadAdminOrders() {
+            const container = document.getElementById('admin-orders-list');
+            if (!container) return;
+            
+            if (orders.length === 0) {
+                container.innerHTML = '<p>Заказов пока нет</p>';
+                return;
+            }
+            
+            // Сортируем заказы по дате (новые сверху)
+            const sortedOrders = [...orders].sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            container.innerHTML = sortedOrders.map(order => `
+                <div class="order-card">
+                    <div class="order-header">
+                        <div>
+                            <span class="order-id">Заказ #${order.id}</span>
+                            <span class="order-date">${order.date}</span>
+                        </div>
+                        <span class="order-status status-${order.status || 'new'}">${getStatusText(order.status)}</span>
+                    </div>
+                    
+                    <div class="order-customer">
+                        <p><strong>Клиент:</strong> ${order.customerName}</p>
+                        <p><strong>Email:</strong> ${order.customerEmail}</p>
+                        <p><strong>Телефон:</strong> ${order.customerPhone}</p>
+                        <p><strong>Адрес:</strong> ${order.customerAddress}</p>
+                        ${order.customerComment ? `<p><strong>Комментарий:</strong> ${order.customerComment}</p>` : ''}
+                        <p><strong>Способ оплаты:</strong> ${getPaymentMethodText(order.paymentMethod)}</p>
+                    </div>
+                    
+                    <div class="order-items">
+                        <p><strong>Товары:</strong></p>
+                        ${order.items.map(item => `
+                            <div class="order-item-row">
+                                <span>${item.product}</span>
+                                <span>${item.price} ₽</span>
+                            </div>
+                        `).join('')}
+                        <div class="order-item-row" style="font-weight: bold; margin-top: 10px;">
+                            <span>Итого:</span>
+                            <span>${order.totalAmount} ₽</span>
+                        </div>
+                    </div>
+                    
+                    <div class="order-actions">
+                        <button class="btn btn-success" onclick="updateOrderStatus(${order.id}, 'processing')">В обработке</button>
+                        <button class="btn btn-primary" onclick="updateOrderStatus(${order.id}, 'completed')">Завершен</button>
+                        <button class="btn btn-danger" onclick="deleteOrder(${order.id})">Удалить</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getStatusText(status) {
+            const statusMap = {
+                'new': 'Новый',
+                'processing': 'В обработке',
+                'completed': 'Завершен'
+            };
+            return statusMap[status] || 'Новый';
+        }
+
+        function getPaymentMethodText(method) {
+            const methodMap = {
+                'card': 'Картой онлайн',
+                'cash': 'Наличными при получении',
+                'card_courier': 'Картой курьеру'
+            };
+            return methodMap[method] || method;
+        }
+
+        function updateOrderStatus(orderId, status) {
+            const orderIndex = orders.findIndex(order => order.id === orderId);
+            if (orderIndex !== -1) {
+                orders[orderIndex].status = status;
+                localStorage.setItem('orders', JSON.stringify(orders));
+                loadAdminOrders();
+                showNotification(`Статус заказа #${orderId} изменен на "${getStatusText(status)}"`);
+            }
+        }
+
+        function deleteOrder(orderId) {
+            if (confirm('Вы уверены, что хотите удалить этот заказ?')) {
+                orders = orders.filter(order => order.id !== orderId);
+                localStorage.setItem('orders', JSON.stringify(orders));
+                loadAdminOrders();
+                showNotification('Заказ удален!');
+            }
+        }
+
         function getGenreName(genre) {
             const genres = {
                 'business': 'Бизнес литература',
@@ -1454,21 +1785,133 @@
             document.getElementById('cart-modal').classList.remove('active');
         }
 
-        function checkout() {
+        // Форма заказа
+        function setupOrderForm() {
+            document.getElementById('order-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                submitOrder();
+            });
+        }
+
+        function openOrderForm() {
             if (cart.length === 0) {
                 alert('Корзина пуста');
                 return;
             }
 
             const total = cart.reduce((sum, item) => sum + item.price, 0);
-            const productList = cart.map(item => `• ${item.product} - ${item.price} ₽`).join('\n');
+            const orderSummary = document.getElementById('order-summary');
             
-            alert(`Заказ оформлен! Сумма: ${total} ₽\n\nТовары:\n${productList}\n\nСпасибо за покупку!`);
+            orderSummary.innerHTML = `
+                <h4>Ваш заказ:</h4>
+                ${cart.map(item => `
+                    <div class="order-item">
+                        <span>${item.product}</span>
+                        <span>${item.price} ₽</span>
+                    </div>
+                `).join('')}
+                <div class="order-total">
+                    <span>Общая сумма:</span>
+                    <span>${total} ₽</span>
+                </div>
+            `;
+
+            // Заполняем скрытые поля формы
+            document.getElementById('order-details').value = cart.map(item => `${item.product} - ${item.price} ₽`).join(', ');
+            document.getElementById('form-total').value = total;
             
-            cart = [];
-            saveCart();
-            updateCartCount();
             closeCart();
+            document.getElementById('order-modal').classList.add('active');
+        }
+
+        function closeOrderModal() {
+            document.getElementById('order-modal').classList.remove('active');
+            document.getElementById('order-form').reset();
+        }
+
+        function submitOrder() {
+            const customerName = document.getElementById('customer-name').value;
+            const customerEmail = document.getElementById('customer-email').value;
+            const customerPhone = document.getElementById('customer-phone').value;
+            const customerAddress = document.getElementById('customer-address').value;
+            const customerComment = document.getElementById('customer-comment').value;
+            const paymentMethod = document.getElementById('payment-method').value;
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            
+            // Создаем объект заказа
+            const order = {
+                id: Date.now(),
+                date: new Date().toLocaleString('ru-RU'),
+                customerName,
+                customerEmail,
+                customerPhone,
+                customerAddress,
+                customerComment,
+                paymentMethod,
+                items: [...cart],
+                totalAmount: total,
+                status: 'new'
+            };
+            
+            // Добавляем заказ в массив заказов
+            orders.push(order);
+            localStorage.setItem('orders', JSON.stringify(orders));
+            
+            // Заполняем поле email для автоматической подстановки
+            document.getElementById('form-email').value = customerEmail;
+            
+            // Отправляем форму через Formspree
+            const form = document.getElementById('order-form');
+            const formData = new FormData(form);
+            
+            // Показываем индикатор загрузки
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Отправка...';
+            submitBtn.disabled = true;
+            
+            // Отправляем запрос
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Очищаем корзину
+                    cart = [];
+                    saveCart();
+                    updateCartCount();
+                    
+                    // Закрываем модальное окно
+                    closeOrderModal();
+                    
+                    // Показываем уведомление
+                    showNotification('Заказ успешно оформлен! Мы свяжемся с вами в ближайшее время.');
+                    
+                    // Обновляем список заказов в админ-панели, если она открыта
+                    if (document.getElementById('admin').classList.contains('active')) {
+                        loadAdminOrders();
+                    }
+                } else {
+                    throw new Error('Ошибка при отправке заказа');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Произошла ошибка при отправке заказа. Пожалуйста, попробуйте еще раз или свяжитесь с нами по телефону.');
+            })
+            .finally(() => {
+                // Восстанавливаем кнопку
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            });
+        }
+
+        function checkout() {
+            openOrderForm();
         }
 
         function showNotification(message) {
@@ -1492,6 +1935,7 @@
                 closeAddBookModal();
                 closeProductDetail();
                 closeLoginModal();
+                closeOrderModal();
             }
         });
     </script>
